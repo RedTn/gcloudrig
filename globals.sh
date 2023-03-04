@@ -607,36 +607,21 @@ function gcloudrig_get_project_quota_limits {
 }
 
 function gcloudrig_check_quota_gpus_all_regions {
-#   if [ ! -v QUOTAS ] ; then
-#     gcloudrig_get_project_quota_limits
-#   fi
+  if [ ! -v QUOTAS ] ; then
+    gcloudrig_get_project_quota_limits
+  fi
 
-#   # if key exists in array
-#   if [ -v "QUOTAS[GPUS_ALL_REGIONS]" ] ; then
-#     # gcloud --format option sometimes outputs nothing if the value is 0.0
-#     if [ -z "${QUOTAS[GPUS_ALL_REGIONS]}" ] || [ "${QUOTAS[GPUS_ALL_REGIONS]}" == "0.0" ] ; then
-#       echo "GPU Quota Check: GPUS_ALL_REGIONS NOT_OK (limit: ${QUOTAS["GPUS_ALL_REGIONS"]})"
-
-#       cat <<EOF >&2
-
-# =-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-# You have to manually request a quota increase for GPUS_ALL_REGIONS
-#   https://console.cloud.google.com/iam-admin/quotas?project=${PROJECT_ID}&metric=GPUs%20(all%20regions)
-
-# See this page for more info on requesting quota:
-#   https://cloud.google.com/compute/quotas#requesting_additional_quota
-
-# =-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-# EOF
-#       exit 1
-#     else
-#       echo "GPU Quota Check: GPUS_ALL_REGIONS OK (limit: ${QUOTAS["GPUS_ALL_REGIONS"]})"
-#     fi
-#   else
-#     echo "GPU Quota Check: GPUS_ALL_REGIONS OK (no limit)"
-#   fi
+  # if key exists in array
+  if [ -v "QUOTAS[GPUS_ALL_REGIONS]" ] ; then
+    # gcloud --format option sometimes outputs nothing if the value is 0.0
+    if [ -z "${QUOTAS[GPUS_ALL_REGIONS]}" ] || [ "${QUOTAS[GPUS_ALL_REGIONS]}" == "0.0" ] ; then
+      echo "Red skip"
+    else
+      echo "GPU Quota Check: GPUS_ALL_REGIONS OK (limit: ${QUOTAS["GPUS_ALL_REGIONS"]})"
+    fi
+  else
+    echo "GPU Quota Check: GPUS_ALL_REGIONS OK (no limit)"
+  fi
 }
 
 ##################
